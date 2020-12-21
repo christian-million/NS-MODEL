@@ -4,15 +4,22 @@ import json
 import os
 
 
+def get_defaults():
+    '''Returns a dictionary of default parameters'''
+    location = os.path.dirname(os.path.realpath(__file__))
+    my_file = os.path.join(location, 'defaults.json')
+    with open(my_file) as f:
+        p = json.load(f)
+        params = {key: value.get("value") for key, value in p.items()}
+
+    return params
+
+
 class Model:
     '''Initializes, Runs, and Captures the interactions between Agents and Food'''
     def __init__(self, params=None):
         if params is None:
-            location = os.path.dirname(os.path.realpath(__file__))
-            my_file = os.path.join(location, 'defaults.json')    
-            with open(my_file) as f:
-                p = json.load(f)
-                params = {key: value.get("value") for key, value in p.items()}
+            params = get_defaults()
 
         self.params = params
         self.agents = []
