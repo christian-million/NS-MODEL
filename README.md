@@ -6,7 +6,7 @@ The thoughts and ideas presented in that video are not my own and all credit sho
 
 # Overview
 
-This is an offshoot of a school assignment [here]().
+This is an offshoot of a school assignment [here](https://github.com/christian-million/natural_selection).
 
 This repository packages the simulation specific code into a package that can be used on its own, or plugged into another GUI / API.
 
@@ -21,10 +21,13 @@ pip install --upgrade git+https://github.com/christian-million/NS-MODEL.git
 ```python
 from ns_model import Model
 
+# Runs with default parameters if no arguments passed
 test_model = Model()
 
+# Runs Model
 test_model.run()
 
+# Prints a population summary
 print(test_model.pop_sum)
 ```
 
