@@ -34,12 +34,12 @@ class Model:
         self.remaining_steps = self.params["DAILY_STEPS"]
 
         # Data Capture Attributes
-        self.pop_sum = [['day', 'agents']]
-        self.attr_sum = [['day', 'avg_speed', 'avg_size', 'avg_sense']]
-        self.agent_data = [['id', 'birthday', 'deathday',
-                            'speed', 'size', 'sense',
-                            'reproduced', 'food_eaten', 'agents_eaten']]
-        self.food_data = [['id', 'birthday', 'deathday']]
+        self.data = {"pop_sum": {"day": [], "agents": []},
+                     "attr_sum": {"day": [], "avg_speed": [], "avg_size": [], "avg_sense": []},
+                     "agent_data": {"id": [], "birthday": [], "deathday": [],
+                                    "speed": [], "size": [], "sense": [],
+                                    "reproduced": [], "food_eaten": [], "agents_eaten": []},
+                     "food_data": {"id": [], "birthday": [], "deathday": []}}
 
         # Initialize original cohort of agents
         for i in range(self.params["N_AGENTS"]):
@@ -92,13 +92,18 @@ class Model:
                 size.append(agent.size)
                 sense.append(agent.sense)
 
-        self.pop_sum.append([self.current_day, living_agents])
+        self.data["pop_sum"]["day"].append(self.current_day)
+        self.data["pop_sum"]["agents"].append(living_agents)
 
         # Average Speed, but return 0 if no agents (i.e., all are dead)
         avg_speed = sum(speeds) / len(speeds) if len(speeds) else 0
         avg_size = sum(size) / len(size) if len(size) else 0
         avg_sense = sum(sense) / len(sense) if len(sense) else 0
-        self.attr_sum.append([self.current_day, avg_speed, avg_size, avg_sense])
+
+        self.data["attr_sum"]["day"].append(self.current_day)
+        self.data["attr_sum"]["avg_speed"].append(avg_speed)
+        self.data["attr_sum"]["avg_size"].append(avg_size)
+        self.data["attr_sum"]["avg_sense"].append(avg_sense)
 
         # Let agents move around and capture their movement
         for i in range(self.params["DAILY_STEPS"]):
@@ -123,19 +128,22 @@ class Model:
 
         for agent in self.agents:
             if agent.alive:
-                self.agent_data.append([agent.id, agent.birthday, -1,
-                                        agent.speed, agent.size, agent.sense,
-                                        agent.data['reproduced'], agent.data['food_eaten'], agent.data['agents_eaten']])
+                self.data["agent_data"]["id"].append(agent.id)
+                self.data["agent_data"]["birthday"].append(agent.birthday)
+                self.data["agent_data"]["deathday"].append(-1)
+                self.data["agent_data"]["speed"].append(agent.speed)
+                self.data["agent_data"]["size"].append(agent.size)
+                self.data["agent_data"]["sense"].append(agent.sense)
+                self.data["agent_data"]["reproduced"].append(agent.data['reproduced'])
+                self.data["agent_data"]["food_eaten"].append(agent.data['food_eaten'])
+                self.data["agent_data"]["agents_eaten"].append(agent.data['agents_eaten'])
 
     def results(self):
         '''Return the results in a single object.'''
-        return {"pop_sum": self.pop_sum,
-                "attr_sum": self.attr_sum,
-                "agent_data": self.agent_data,
-                "food_data": self.food_data}
+        return self.data
 
 
 if __name__ == '__main__':
     test_model = Model()
     test_model.run()
-    print(test_model.agent_data)
+    print(test_model.data["agent_data"])

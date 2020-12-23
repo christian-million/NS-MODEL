@@ -103,7 +103,9 @@ class Food:
     def die(self):
         '''Sets alive attribute to False'''
         self.alive = False
-        self.model.food_data.append([self.id, self.birthday, self.model.current_day])
+        self.model.data["food_data"]["id"].append(self.id)
+        self.model.data["food_data"]["birthday"].append(self.birthday)
+        self.model.data["food_data"]["deathday"].append(self.model.current_day)
         self.model.food.remove(self)
 
 
@@ -165,9 +167,17 @@ class Agent:
     def die(self):
         '''Sets alive status to False'''
         self.alive = False
-        self.model.agent_data.append([self.id, self.birthday, self.model.current_day,
-                                      self.speed, self.size, self.sense,
-                                      self.data['reproduced'], self.data['food_eaten'], self.data['agents_eaten']])
+
+        self.model.data["agent_data"]["id"].append(self.id)
+        self.model.data["agent_data"]["birthday"].append(self.birthday)
+        self.model.data["agent_data"]["deathday"].append(self.model.current_day)
+        self.model.data["agent_data"]["speed"].append(self.speed)
+        self.model.data["agent_data"]["size"].append(self.size)
+        self.model.data["agent_data"]["sense"].append(self.sense)
+        self.model.data["agent_data"]["reproduced"].append(self.data['reproduced'])
+        self.model.data["agent_data"]["food_eaten"].append(self.data['food_eaten'])
+        self.model.data["agent_data"]["agents_eaten"].append(self.data['agents_eaten'])
+
         self.model.agents.remove(self)
 
     def closest_food(self):
@@ -388,4 +398,3 @@ class Agent:
         self.model.agents.append(offspring)
 
         self.data["reproduced"] += 1
-
