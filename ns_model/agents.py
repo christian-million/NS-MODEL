@@ -93,7 +93,8 @@ class Food:
     def __init__(self, model):
         self.model = model
         self.birthday = self.model.current_day
-        self.id = str(self.birthday) + str(len(self.model.agents))
+        self.id = str(self.birthday) + "-" + str(self.model.food_count)
+        self.model.food_count += 1
         self.pos = Pos(uniform(0, self.model.params["WIDTH"]), randint(0, self.model.params["HEIGHT"]))
         self.size = self.model.params["FOOD_SIZE"]
         self.value = self.model.params["FOOD_VALUE"]
@@ -111,7 +112,8 @@ class Agent:
     def __init__(self, model, speed, size, sense):
         self.model = model
         self.birthday = self.model.current_day
-        self.id = str(self.birthday) + str(len(self.model.agents))
+        self.id = str(self.birthday) + "-" + str(self.model.agent_count)
+        self.model.agent_count += 1
         self.pos = None
         self.heading = None
         self.speed = speed

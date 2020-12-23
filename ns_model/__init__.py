@@ -4,13 +4,17 @@ import json
 import os
 
 
-def get_defaults():
+def get_defaults(verbose=False):
     '''Returns a dictionary of default parameters'''
     location = os.path.dirname(os.path.realpath(__file__))
     my_file = os.path.join(location, 'defaults.json')
     with open(my_file) as f:
         p = json.load(f)
         params = {key: value.get("value") for key, value in p.items()}
+
+    # Return parameters with descriptions and min/max values
+    if verbose:
+        return p
 
     return params
 
@@ -23,7 +27,9 @@ class Model:
 
         self.params = params
         self.agents = []
+        self.agent_count = 0
         self.food = []
+        self.food_count = 0
         self.current_day = 0
         self.remaining_steps = self.params["DAILY_STEPS"]
 
@@ -132,4 +138,4 @@ class Model:
 if __name__ == '__main__':
     test_model = Model()
     test_model.run()
-    print(test_model.pop_sum)
+    print(test_model.agent_data)
